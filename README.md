@@ -16,7 +16,7 @@ Fetching, querying and saving records is partially working.
 
 
 ## Example
-```
+```php
 <?php
 require dirname(__FILE__).'/autoload.php';
 use CloudKit\Container;
