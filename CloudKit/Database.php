@@ -59,9 +59,10 @@ class Database
         $KEY_ID 				= $this->container->getKeyID();
         $CONTAINER 				= $this->container->getContainerID();
         $PRIVATE_PEM_LOCATION 	= $this->container->getPrivatePEM(); // Store this file outside the public folder!
+        $Environment = $this->container->getEnvironment();
         $result = NULL;
          // Config
-        $url = 'https://api.apple-cloudkit.com/database/1/' . $CONTAINER . '/development/' . $this->type . '/records/'.$requestType;
+        $url = 'https://api.apple-cloudkit.com/database/1/' . $CONTAINER . '/'. $Environment . '/' . $this->type . '/records/'.$requestType;
         $body = json_encode($postArray);
         // Set cURL
         $ch = curl_init();
