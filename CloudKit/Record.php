@@ -15,7 +15,7 @@ class Record
     private $recordType;
     private $recordName;
     private $recordChangeTag;
-    private $fields;
+    private $fields = array();
     private $createdAt;
     private $createdBy;
     private $modifiedAt;
@@ -150,7 +150,9 @@ class Record
             }
             $fields[$key] = ['type' => $ft, 'value' => $fv];
         }
-        $a['fields'] = $fields;
+		if(count($fields)){
+        	$a['fields'] = $fields;
+		}
         return $a;
     }
 }
