@@ -7,6 +7,7 @@
  */
 
 namespace CloudKit;
+use DateTime;
 
 class Location
 {
@@ -44,7 +45,7 @@ class Location
                     $a->course = $value;
                     break;
                 case 'timestamp':
-                    $a->course = (new DateTime())->setTimestamp($value / 1000);
+                    $a->timestamp = (new DateTime())->setTimestamp($value / 1000);
                     break;
             }
         }
