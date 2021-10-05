@@ -1,18 +1,29 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: malhal
- * Date: 04/04/2016
- * Time: 15:03
+ * Error.php
+ * Copyright 2016-2021, Malcolm Hall, Timothy Oliver. All rights reserved.
+ * Licensed under the MIT License. Please see the LICENSE file for the full license text.
  */
+
+// phpcs:disable PSR1.Classes.ClassDeclaration
 
 namespace CloudKit;
 
-abstract class ErrorCode{
-    const NOT_FOUND = 'NOT_FOUND';
+/**
+ * Lists all of the possible error codes that
+ * may be returned by CloudKit when a database query
+ * has failed.
+ */
+abstract class ErrorCode
+{
+    public const NOT_FOUND = 'NOT_FOUND';
 }
 
-class CKError
+/**
+ * An error object that was returned by CloudKit when a database query has failed.
+ */
+class Error
 {
     private $serverErrorCode;
     private $reason;
@@ -20,8 +31,9 @@ class CKError
     private $uuid;
     private $retryAfter;
 
-    public function __construct($array){
-        foreach($array as $key => $value) {
+    public function __construct($array)
+    {
+        foreach ($array as $key => $value) {
             switch ($key) {
                 case 'serverErrorCode':
                     $this->serverErrorCode = $value;
@@ -42,19 +54,23 @@ class CKError
         }
     }
 
-    public function getServerErrorCode(){
+    public function getServerErrorCode()
+    {
         return $this->serverErrorCode;
     }
 
-    public function getReason(){
+    public function getReason()
+    {
         return $this->reason;
     }
 
-    public function getRecordName(){
+    public function getRecordName()
+    {
         return $this->recordName;
     }
 
-    public function getUuid(){
+    public function getUuid()
+    {
         return $this->uuid;
     }
 }
