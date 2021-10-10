@@ -1,15 +1,20 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: malhal
- * Date: 04/04/2016
- * Time: 15:25
+ * Record.php
+ * Copyright 2016-2021, Malcolm Hall, Timothy Oliver. All rights reserved.
+ * Licensed under the MIT License. Please see the LICENSE file for the full license text.
  */
 
 namespace CloudKit;
+
 use DateTime;
 use ReflectionClass;
 
+/**
+ * Represents a CKRecord, a collection of key-value pairs that stores user data.
+ * https://developer.apple.com/documentation/cloudkit/ckrecord
+ */
 class Record
 {
     private $recordType;
@@ -25,16 +30,18 @@ class Record
     private $changedFields;
     private $exists = false;
 
-    public function __construct($recordType, $recordName = NULL, $zoneID = NULL){
+    public function __construct($recordType, $recordName = null, $zoneID = null)
+    {
         $this->recordType = $recordType;
         $this->recordName = $recordName;
         $this->zoneID = $zoneID;
     }
 
-    public static function createFromServerArray($array){
+    public static function createFromServerArray($array)
+    {
         $r = new Record($array['recordType']);
         $r->exists = true;
-        foreach($array as $key => $value){
+        foreach ($array as $key => $value) {
             switch ($key) {
                 case 'recordName':
                     $r->recordName = $value;
@@ -54,7 +61,7 @@ class Record
                     $r->modifiedAt = (new DateTime())->setTimestamp($value['timestamp'] / 1000);
                     break;
                 case 'fields':
-                    foreach($value as $fieldKey => $fieldValue){
+                    foreach ($value as $fieldKey => $fieldValue) {
                         $ft = $fieldValue['type'];
                         $fv = $fieldValue['value'];
                         // convert the value where necessary.
@@ -78,49 +85,57 @@ class Record
         return $r;
     }
 
-    public function getRecordName(){
+    public function getRecordName()
+    {
         return $this->recordName;
     }
 
-    public function getCreatedAt(){
+    public function getCreatedAt()
+    {
         return $this->createdAt;
     }
 
-    public function getField($key){
+    public function getField($key)
+    {
         return $this->fields[$key];
     }
 
-    public function changedFields(){
+    public function changedFields()
+    {
         return $this->changedFields;
     }
 
-    public function setField($key, $value){
+    public function setField($key, $value)
+    {
         $this->fields[$key] = $value;
         // store that this key was changed.
-        if(!$this->changedFields || !in_array($key, $this->changedFields)) {
+        if (!$this->changedFields || !in_array($key, $this->changedFields)) {
             $this->changedFields[] = $key;
         }
     }
 
-    public function toServerArray(){
+    public function toServerArray()
+    {
         $a = array();
         $a['recordName'] = $this->recordName;
-        if($this->exists) {
+        if ($this->exists) {
             // We only need to include the change tag if this record came from the server.
             $a['recordChangeTag'] = $this->recordChangeTag;
-        }else{
+        } else {
             // We only need to include the type if this is a new record.
             $a['recordType'] = $this->recordType;
         }
+
         $fields = array();
-        foreach($this->fields as $key => $value){
-            $ft = NULL;
-            $fv = NULL;
-            if(is_object($value)){
+        foreach ($this->fields as $key => $value) {
+            $ft = null;
+            $fv = null;
+
+            if (is_object($value)) {
                 $className = (new ReflectionClass($value))->getShortName();
-                switch($className) {
+                switch ($className) {
                     case 'Location':
-                    case 'Reference';
+                    case 'Reference':
                         $ft = strtoupper($className);
                         $fv = $value->toServerArray();
                         break;
@@ -132,9 +147,9 @@ class Record
                         throw new \InvalidArgumentException("Invalid class $className for field $key in record.");
                         break;
                 }
-            }else{
+            } else {
                 $fv = $value;
-                switch(gettype($value)){
+                switch (gettype($value)) {
                     case 'integer':
                         $ft = 'NUMBER_INT64';
                         break;
@@ -150,9 +165,11 @@ class Record
             }
             $fields[$key] = ['type' => $ft, 'value' => $fv];
         }
-		if(count($fields)){
-        	$a['fields'] = $fields;
-		}
+
+        if (count($fields)) {
+            $a['fields'] = $fields;
+        }
+
         return $a;
     }
 }
