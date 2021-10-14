@@ -9,7 +9,7 @@
 namespace CloudKit;
 
 /**
- * Represents CKContainer, the top-level object that represents a single instance of CloudKit in iCloud.
+ * Represents a CKContainer, the top-level object that represents a single CloudKit instance in iCloud.
  * Contains the public and private databases that store data on behalf of one or more applications
  * vended by the same developer account.
  * https://developer.apple.com/documentation/cloudkit/ckcontainer

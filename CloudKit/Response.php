@@ -8,9 +8,13 @@
 
 namespace CloudKit;
 
+/**
+ * A base class that parses the common elements in a response from CloudKit
+ * to a request that was made from this library.
+ */
 class Response
 {
-    protected $errors;
+    protected array $errors;
 
     public function __construct($array)
     {

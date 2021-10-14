@@ -13,7 +13,7 @@ namespace CloudKit;
  */
 class RecordsResponse extends Response
 {
-    private $records;
+    private array $records;
 
     public function __construct($array)
     {

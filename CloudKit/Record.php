@@ -17,15 +17,15 @@ use ReflectionClass;
  */
 class Record
 {
-    private $recordType;
-    private $recordName;
-    private $recordChangeTag;
-    private $fields = array();
-    private $createdAt;
-    private $createdBy;
-    private $modifiedAt;
-    private $modifiedBy;
-    private $deleted;
+    private string $recordType;
+    private string $recordName;
+    private string $recordChangeTag;
+    private array $fields = array();
+    private DateTime $createdAt;
+    private DateTime $createdBy;
+    private DateTime $modifiedAt;
+    private string $modifiedBy;
+    private string $deleted;
     private $zoneID;
     private $changedFields;
     private $exists = false;

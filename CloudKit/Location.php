@@ -16,14 +16,14 @@ use DateTime;
  */
 class Location
 {
-    public $latitude;
-    public $longitude;
-    public $horizontalAccuracy;
-    public $verticalAccuracy;
-    public $altitude;
-    public $speed;
-    public $course;
-    public $timestamp;
+    public float $latitude;
+    public float $longitude;
+    public string $horizontalAccuracy;
+    public string $verticalAccuracy;
+    public string $altitude;
+    public string $speed;
+    public string $course;
+    public DateTime $timestamp;
 
     public function __construct($latitude, $longitude)
     {

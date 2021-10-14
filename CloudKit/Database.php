@@ -9,15 +9,15 @@
 namespace CloudKit;
 
 /**
- * Represents CKDatabase, a collection of record zones and subscriptions.
+ * Represents a CKDatabase, a collection of record zones and subscriptions.
  * Databases can be either public, and accessible by all users, or private, and
  * accessible by only a single iCloud account.
  * https://developer.apple.com/documentation/cloudkit/ckdatabase
  */
 class Database
 {
-    private $container;
-    private $type;
+    private Container $container;
+    private string $type;
 
     public function __construct(Container $container, $type)
     {
@@ -29,9 +29,9 @@ class Database
     {
         $records = array();
         foreach ($recordNames as $recordName) {
-            $records[] = [ 'recordName' => $recordName ];
+            $records[] = ['recordName' => $recordName];
         }
-        $postArray = array_merge([ 'records' => $records ], $options);
+        $postArray = array_merge(['records' => $records], $options);
 
         $r = $this->request('lookup', $postArray);
         return new RecordsResponse($r);
@@ -39,7 +39,7 @@ class Database
 
     public function performQuery(Query $query, $options = array())
     {
-        $postArray = array_merge([ 'query' => $query->toServerArray() ], $options);
+        $postArray = array_merge(['query' => $query->toServerArray()], $options);
         $r = $this->request('query', $postArray);
         $response = new QueryResponse($r);
         return $response;
@@ -74,7 +74,10 @@ class Database
         $result = null;
 
          // Config
-        $url = 'https://api.apple-cloudkit.com/database/1/' . $CONTAINER . '/' . $Environment . '/' . $this->type . '/records/' . $requestType;
+        $url = 'https://api.apple-cloudkit.com/database/1/' . $CONTAINER . '/'
+                                                            . $Environment . '/'
+                                                            . $this->type . '/records/'
+                                                            . $requestType;
         $body = json_encode($postArray);
 
         // Set cURL
@@ -94,8 +97,6 @@ class Database
 
         // Sign signature with private key
         if (openssl_sign($signature, $signed_signature, $pkeyid, "sha256WithRSAEncryption")) {
-            openssl_free_key($pkeyid);
-
             // Set headers
             curl_setopt(
                 $ch,

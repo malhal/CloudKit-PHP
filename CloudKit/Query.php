@@ -14,44 +14,44 @@ namespace CloudKit;
  */
 class Query
 {
-    protected $recordType;
-    protected $filters;
-    protected $sorters;
+    protected string $recordType;
+    protected array $filters;
+    protected array $sorters;
 
-    protected $operators = ['=' => 'EQUALS',
-                            '!=' => 'NOT_EQUALS',
-                            '<' => 'LESS_THAN',
-                            '<=' => 'LESS_THAN_OR_EQUALS',
-                            '>' => 'GREATER_THAN',
-                            '>=' => 'GREATER_THAN_OR_EQUALS'];
+    protected array $operators = ['=' => 'EQUALS',
+                                 '!=' => 'NOT_EQUALS',
+                                 '<' => 'LESS_THAN',
+                                 '<=' => 'LESS_THAN_OR_EQUALS',
+                                 '>' => 'GREATER_THAN',
+                                 '>=' => 'GREATER_THAN_OR_EQUALS'];
 
     public function __construct($recordType)
     {
         $this->recordType = $recordType;
     }
 
-    public function getRecordType()
+    public function getRecordType(): string
     {
         return $this->recordType;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return $this->filters;
     }
 
-    public function getSorters()
+    public function getSorters(): array
     {
         return $this->sorters;
     }
 
-    protected function invalidOperatorAndValue($operator, $value)
+    protected function invalidOperatorAndValue($operator, $value): bool
     {
         $isOperator = in_array($operator, $this->operators);
         return ($isOperator && $operator != '=' && is_null($value));
     }
 
-    public function filter($fieldName, $operator = null, $value = null)
+    public function filter($fieldName, $operator = null, $value = null): Query
     {
         if (func_num_args() == 2) {
             list($value, $operator) = array($operator, '=');
@@ -66,7 +66,7 @@ class Query
         return $this;
     }
 
-    public function filterIn($fieldName, $values, $not = false)
+    public function filterIn($fieldName, $values, $not = false): Query
     {
         $this->filters[] = ['comparator' => ($not ? 'NOT_IN' : 'IN'),
             'fieldName' => $fieldName,
@@ -75,7 +75,7 @@ class Query
         return $this;
     }
 
-    public function filterNotIn($fieldName, $values)
+    public function filterNotIn($fieldName, $values): Query
     {
         return $this->filterIn($fieldName, $values, true);
     }

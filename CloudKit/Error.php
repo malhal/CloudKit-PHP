@@ -25,11 +25,11 @@ abstract class ErrorCode
  */
 class Error
 {
-    private $serverErrorCode;
-    private $reason;
-    private $recordName;
-    private $uuid;
-    private $retryAfter;
+    private string $serverErrorCode;
+    private string $reason;
+    private string $recordName;
+    private string $uuid;
+    private string $retryAfter;
 
     public function __construct($array)
     {
@@ -54,22 +54,22 @@ class Error
         }
     }
 
-    public function getServerErrorCode()
+    public function getServerErrorCode(): string
     {
         return $this->serverErrorCode;
     }
 
-    public function getReason()
+    public function getReason(): string
     {
         return $this->reason;
     }
 
-    public function getRecordName()
+    public function getRecordName(): string
     {
         return $this->recordName;
     }
 
-    public function getUuid()
+    public function getUuid(): string
     {
         return $this->uuid;
     }
